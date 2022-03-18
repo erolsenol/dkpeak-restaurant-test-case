@@ -28,14 +28,12 @@
     ></v-text-field>
 
     <v-btn
-      
       color="success"
       class="mr-4"
-      @click="validate"
+      @click="register"
     >
       Validate
     </v-btn>
-
       </v-form>
      </v-col>
   </v-row>
@@ -46,17 +44,17 @@ export default {
   name:"SignInForm",
   data(){
     return {
-        valid: true,
+      valid:true,
       email:null,
       fullName:null,
       password:null,
       fullNameRules: [
         v => !!v || 'Name is required',
-        v => (v && v.length <= 3) || 'Name must be less than 3 characters',
+        v => (v && v.length >= 3) || 'Name must be less than 3 characters',
       ],
        passwordRules: [
         v => !!v || 'Name is required',
-        v => (v && v.length <= 6) || 'Name must be less than 6 characters',
+        v => (v && v.length >= 6) || 'Name must be less than 6 characters',
       ],
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -65,7 +63,11 @@ export default {
     }
   },
   methods:{
-     validate () {
+    async register () {
+        await this.$refs.form.validate();
+        if(this.valid) {
+          console.log("send request")
+        }
       },
   }
 }
