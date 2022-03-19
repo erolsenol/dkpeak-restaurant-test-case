@@ -1,70 +1,145 @@
 <template>
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-  Sign Up
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
+  <v-row align="center" justify="center">
+    <v-col cols="12" md="6">
+      <v-form
+      ref="form"
+      v-model="valid"
+      lazy-validation>
+
+       <v-text-field
+      v-model="fullName"
+      :rules="fullNameRules"
+      label="FullName"
       required
     ></v-text-field>
 
-    <v-text-field
+      <v-text-field
       v-model="email"
       :rules="emailRules"
       label="E-mail"
       required
     ></v-text-field>
 
-    <v-select
-      v-model="select"
-      :items="items"
-      :rules="[v => !!v || 'Item is required']"
-      label="Item"
+     <v-text-field
+      v-model="password"
+      :rules="passwordRules"
+      label="Password"
+      :append-icon="pShow1 ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="pShow1 ? 'text' : 'password'"
+      @click:append="pShow1 = !pShow1"
       required
-    ></v-select>
+    ></v-text-field>
 
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Do you agree?"
+     <v-text-field
+      v-model="passwordMatch"
+      :rules="passwordMatchRules"
+      label="Password"
+      :append-icon="pShow2 ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="pShow2 ? 'text' : 'password'"
+      @click:append="pShow2 = !pShow2"
+      class="mb-3"
       required
-    ></v-checkbox>
+    ></v-text-field>
 
     <v-btn
-      :disabled="!valid"
       color="success"
       class="mr-4"
-      @click="validate"
+      @click="()=> $router.push({ name: 'sign_in'})"
+      :loading="loading"
     >
-      Validate
+      Sing in
     </v-btn>
 
     <v-btn
-      color="error"
+      color="success"
       class="mr-4"
-      @click="reset"
+      @click="register"
+      :loading="loading"
     >
-      Reset Form
+      Sing up
     </v-btn>
-
-    <v-btn
-      color="warning"
-      @click="resetValidation"
-    >
-      Reset Validation
-    </v-btn>
-  </v-form>
+      </v-form>
+     </v-col>
+     <SnackBar v-model="snackbar.value" :text="snackbar.text"/>
+  </v-row>
 </template>
 
 <script>
+import SnackBar from "@/components/SnackBar.vue"
 export default {
-  name:"SignUpForm"
+  name:"SignUnForm",
+  components: {
+    SnackBar
+  },
+  data(vm){
+    return {
+      loading:false,
+      snackbar: {
+        value: false,
+        text: "Snackbar Text"
+      },
+      valid:true,
+      email:null,
+      fullName:null,
+      password:null,
+      passwordMatch:null,
+      pShow1: false,
+      pShow2: false,
+      fullNameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length >= 3) || 'Name must be less than 3 characters',
+      ],
+      passwordRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length >= 6) || 'Name must be less than 6 characters',
+      ],
+      passwordMatchRules: [ v => v === vm.password || (`Password you entered don't match`),],
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+    }
+  },
+  methods:{
+    async register () {
+        await this.$refs.form.validate();
+        if(this.valid) {
+          this.loading = true
+          const requestBody = {
+            email:this.email,
+            fullName:this.fullName,
+            password:this.password
+            }
+          const response = await fetch('http://164.92.154.153:4001/v1/auth/local/signup', {
+             method: 'POST',
+             headers: {
+               'Content-Type': 'application/json'
+               },
+             body: JSON.stringify(requestBody)
+          });
+          const responseData = await response.json();
+          if(responseData && responseData.access_token && responseData.refresh_token) {
+            const accessToken = responseData.access_token;
+            const refreshToken = responseData.refresh_token;
 
+            localStorage.setItem('access_token',JSON.stringify(accessToken))
+            localStorage.setItem('refresh_token',JSON.stringify(refreshToken))
+
+            console.log("accessToken",accessToken);
+            console.log("refreshToken",refreshToken);
+
+            this.$router.push({ name: 'restaurant'})
+          } else {
+            this.snackbar= {
+              value: true,
+              text: "something went wrong"
+            }
+          }
+
+          this.loading = false;
+        }
+      },
+  }
 }
 </script>
 
