@@ -1,5 +1,5 @@
 <template>
-  <div class="max-height">
+ <v-container fluid class="max-height">
      <CoreToolbar />
      <v-row justify="center" class="max-height">
        <v-col cols="2">
@@ -7,7 +7,7 @@
        </v-col>
       <router-view />
       </v-row>
-   </div>
+      </v-container>
 </template>
 
 <script>
@@ -18,8 +18,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .max-height {
-  min-height: 1000%;
+  min-height: 100%;
 }
 </style>

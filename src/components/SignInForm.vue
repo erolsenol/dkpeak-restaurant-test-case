@@ -26,7 +26,7 @@
     <v-btn
       color="success"
       class="mr-4"
-      @click="register"
+      @click="login"
       :loading="loading"
     >
       Sing in
@@ -76,39 +76,41 @@ export default {
     }
   },
   methods:{
-    async register () {
+    async login () {
         await this.$refs.form.validate();
         if(this.valid) {
-          this.loading = true
+          this.loading = true;
           const requestBody = {
             email:this.email,
             password:this.password
             }
-          const response = await fetch('http://164.92.154.153:4001/v1/auth/local/signin', {
-             method: 'POST',
-             headers: {
-               'Content-Type': 'application/json'
-               },
-             body: JSON.stringify(requestBody)
-          });
-          const responseData = await response.json();
-          if(responseData && responseData.access_token && responseData.refresh_token) {
-            const accessToken = responseData.access_token;
-            const refreshToken = responseData.refresh_token;
+            this.$store.dispatch("Login", requestBody)
+            
+          // const response = await fetch('http://164.92.154.153:4001/v1/auth/local/signin', {
+          //    method: 'POST',
+          //    headers: {
+          //      'Content-Type': 'application/json'
+          //      },
+          //    body: JSON.stringify(requestBody)
+          // });
+          // const responseData = await response.json();
+          // if(responseData && responseData.access_token && responseData.refresh_token) {
+          //   const accessToken = responseData.access_token;
+          //   const refreshToken = responseData.refresh_token;
 
-            localStorage.setItem('access_token',JSON.stringify(accessToken))
-            localStorage.setItem('refresh_token',JSON.stringify(refreshToken))
+          //   localStorage.setItem('access_token',JSON.stringify(accessToken))
+          //   localStorage.setItem('refresh_token',JSON.stringify(refreshToken))
 
-            console.log("accessToken",accessToken);
-            console.log("refreshToken",refreshToken)
+          //   console.log("accessToken",accessToken);
+          //   console.log("refreshToken",refreshToken)
 
-            this.$router.push({ name: 'restaurant'})
-          } else {
-            this.snackbar= {
-              value: true,
-              text: "something went wrong"
-            }
-          }
+          //   this.$router.push({ name: 'restaurant'})
+          // } else {
+          //   this.snackbar= {
+          //     value: true,
+          //     text: "something went wrong"
+          //   }
+          // }
 
           this.loading = false;
         }

@@ -4,7 +4,10 @@ import SignIn from "@/container/SignIn";
 import FullContent from "@/container/FullContent";
 import SignInForm from "@/components/SignInForm";
 import SignUpForm from "@/components/SignUpForm";
-import Restaurant from "@/views/Restaurant";
+import Restaurant from "@/views/restaurant";
+import CreateRestaurant from "@/views/restaurant/CreateRestaurant";
+import Items from "@/views/item";
+import CreateItem from "@/views/item/CreateItem";
 
 Vue.use(VueRouter);
 
@@ -35,12 +38,34 @@ const routes = [
     path: "/restaurant",
     name: "restaurant",
     component: FullContent,
-    redirect: "/restaurant/items",
+    redirect: "/restaurant/list",
     children: [
       {
-        path: "/restaurant/items",
+        path: "/restaurant/list",
         component: Restaurant,
-        name: "restaurant_items",
+        name: "restaurant_list",
+      },
+      {
+        path: "/restaurant/create",
+        component: CreateRestaurant,
+        name: "restaurant_create",
+      },
+    ],
+  },
+  {
+    path: "/items",
+    name: "items",
+    component: FullContent,
+    children: [
+      {
+        path: "/items/list",
+        component: Items,
+        name: "items_list",
+      },
+      {
+        path: "/item/create",
+        component: CreateItem,
+        name: "item_create",
       },
     ],
   },

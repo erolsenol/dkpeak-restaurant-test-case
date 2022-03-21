@@ -1,7 +1,6 @@
 import DkpeakConnector from "@/http/api/connector/DkpeakConnector";
 import { TokenUtils } from "@/utils/token.utils";
 import { ACCEPTED, OK, UNAUTHORIZED } from "http-status-codes";
-import { NO_REFRESH_TOKEN } from "../../../response/status/idenfit/";
 import store from "@/store";
 
 const AUTH_TOKEN_PREFIX = "Bearer ";
@@ -40,18 +39,21 @@ const AuthService = {
    * @throws AuthenticationError
    **/
   login: async function (payload) {
+    console.log(payload);
+    console.log(DkpeakConnector.login());
     return new Promise((resolve, reject) => {
       DkpeakConnector.login(payload)
-        .then(({ headers, data, status }) => {
-          if (status === OK) {
-            const token = headers.authorization.replace(AUTH_TOKEN_PREFIX, "");
-            console.log("token", token);
-            if (data) {
-              console.log("data", data);
-            }
-          } else {
-            reject(false);
-          }
+        .then((response) => {
+          console.log("response", response);
+          resolve(true);
+          // if (status === OK) {
+          //   console.log("data", data);
+          //   if (data) {
+          //     console.log("data", data);
+          //   }
+          // } else {
+          //   reject(false);
+          // }
         })
         .catch((error) => {
           reject(new AuthenticationError(-401, error.toString()));
@@ -112,7 +114,7 @@ const AuthService = {
         DkpeakConnector.refreshToken()
           .then(({ headers, status, data }) => {
             if (status === OK) {
-              if (data.error && data.error.code === NO_REFRESH_TOKEN) {
+              if (data.error) {
                 TokenUtils.removeAllStorage();
                 DkpeakConnector.setRemoveHeaders();
                 DkpeakConnector.unmount401Interceptor();

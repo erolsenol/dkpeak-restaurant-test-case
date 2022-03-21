@@ -5,7 +5,7 @@ import { UNAUTHORIZED } from "http-status-codes";
 const TIMEOUT = 60000;
 const AUTHORIZATION_HEADER_KEY = "Authorization";
 
-export default class DkpeakConnector {
+export default class Connector {
   constructor(BASE_URL) {
     this.client = axios.create({
       baseURL: BASE_URL,
@@ -36,7 +36,7 @@ export default class DkpeakConnector {
   }
 
   setAuthorizationHeader(header) {
-    let token = header || `Bearer ${store.state.authToken}`;
+    let token = header || `Bearer ${store.state.access_token}`;
     this.setHeader(AUTHORIZATION_HEADER_KEY, token);
   }
 
@@ -70,17 +70,19 @@ export default class DkpeakConnector {
   }
 
   async login(data) {
-    console.log("data", data);
-    console.log(this.client);
-    return this.client.post("auth/local/signin", data, {});
+    return await this.client.post("v1/auth/local/signin", data, {});
   }
 
   async logout() {
-    return this.client.post("v1/auth/logout");
+    return this.client.get("v1/auth/logout");
+  }
+
+  async getRestaurants() {
+    return this.client.get("v1/resturant");
   }
 
   async refreshToken() {
-    return this.client.post("v1/auth/refresh", null, {
+    return this.client.post("/v1/auth/refresh", null, {
       headers: {
         "Refresh-Token": store.state.refresh_token,
       },
@@ -106,8 +108,9 @@ export default class DkpeakConnector {
         return response;
       },
       function (error) {
+        console.log("error", error);
         if (!error.response) {
-          return false;
+          return error;
         }
         const errorResponse = error.response;
         if (pointer.isTokenExpired(errorResponse))

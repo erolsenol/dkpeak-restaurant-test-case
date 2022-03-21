@@ -1,7 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
-import AuthService from "@/http/api/services/auth";
+// import AuthService from "@/http/api/services/auth";
+import { DkpeakConnector } from "@/http/clients";
+
+const TOKEN_KEY = process.env.VUE_APP_TOKEN_KEY;
+const REFRESH_TOKEN_KEY = process.env.VUE_APP_REFRESH_TOKEN_KEY;
 
 Vue.use(Vuex);
 
@@ -17,27 +21,63 @@ export const store = new Vuex.Store({
     setToken(state, token) {
       state.access_token = token.access_token;
       state.refresh_token = token.refresh_token;
+      state.login = token.login;
     },
   },
   actions: {
-    async Login({ commit }) {
-      console.log("login request");
-      const response = AuthService.login({ email: "", password: "" });
+    async Login({ commit }, data) {
+      console.log("login request body", data);
+      const response = await DkpeakConnector.login(data);
       console.log("response", response);
-      commit("setToken", { access_token: true, refresh_token: true });
+      if (
+        response.status === 200 &&
+        response.data &&
+        response.data.access_token &&
+        response.data.refresh_token
+      ) {
+        localStorage.setItem(TOKEN_KEY, response.data.access_token);
+        localStorage.setItem(REFRESH_TOKEN_KEY, response.data.refresh_token);
+        localStorage.setItem("login", JSON.stringify(true));
+        commit("setToken", {
+          access_token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+          login: true,
+        });
+        DkpeakConnector.mount401Interceptor();
+        DkpeakConnector.setAuthorizationHeader();
+        router.push({ name: "restaurant" });
+      }
     },
     async RefreshToken({ commit }) {
       try {
-        console.log("refresh token request");
+        const response = await DkpeakConnector.refreshToken();
+        console.log("refresh token response", response);
       } catch {
-        commit("setToken", { access_token: null, refresh_token: null });
+        commit("setToken", {
+          access_token: null,
+          refresh_token: null,
+          login: false,
+        });
         router.push({ name: "login" });
       }
     },
     async Logout({ commit }) {
-      console.log("log out request");
-      commit("setToken", { access_token: null, refresh_token: null });
-      router.push({ name: "login" });
+      const response = await DkpeakConnector.logout();
+      console.log("response", response);
+      if (response.data) {
+        //logout completed
+        console.log("logout completed");
+      }
+      DkpeakConnector.setRemoveHeaders();
+      localStorage.setItem(TOKEN_KEY, "");
+      localStorage.setItem(REFRESH_TOKEN_KEY, "");
+      localStorage.setItem("login", JSON.stringify(false));
+      commit("setToken", {
+        access_token: null,
+        refresh_token: null,
+        login: false,
+      });
+      router.push({ name: "sign_in" });
     },
   },
   getters: {
