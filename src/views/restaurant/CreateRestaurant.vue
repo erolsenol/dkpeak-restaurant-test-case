@@ -1,22 +1,24 @@
 <template>
-  <v-container>
-    <v-row align="center" justify="center">
-      <v-col cols="8" md="6" lg="5">
-        <v-text-field label="Name" v-model="name"></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row align="center" justify="center">
-      <v-col cols="8" md="6" lg="5">
-        <v-text-field label="Phone" v-model="phone"></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row align="center" justify="center">
-      <v-col cols="4">
-        <v-btn outlined @click="saveRestaurant"> Save Restaurant </v-btn>
-      </v-col>
-    </v-row>
-    <SnackBar v-model="bar.value" :color="bar.color" :text="bar.text" />
-  </v-container>
+  <v-row>
+    <v-col cols="12">
+      <v-row align="center" justify="center" class="pt-5">
+        <v-col cols="8" md="6" lg="5">
+          <v-text-field label="Name" v-model="name"></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
+        <v-col cols="8" md="6" lg="5">
+          <v-text-field label="Phone" v-model="phone"></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
+        <v-col cols="4">
+          <v-btn outlined @click="saveRestaurant"> Save Restaurant </v-btn>
+        </v-col>
+        <SnackBar v-model="bar.value" :color="bar.color" :text="bar.text" />
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

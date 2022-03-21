@@ -1,26 +1,24 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :items-per-page="5"
-          class="elevation-1"
-        >
-          <template v-slot:[`item.name`]="{ item }">
-            {{ item.name }}
-          </template>
-          <template v-slot:[`item.price`]="{ item }">
-            {{ item.price }}
-          </template>
-          <template v-slot:[`item.description`]="{ item }">
-            {{ item.description }}
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row class="pt-4">
+    <v-col cols="12">
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :items-per-page="5"
+        class="elevation-1"
+      >
+        <template v-slot:[`item.name`]="{ item }">
+          {{ item.name }}
+        </template>
+        <template v-slot:[`item.price`]="{ item }">
+          {{ item.price }}
+        </template>
+        <template v-slot:[`item.description`]="{ item }">
+          {{ item.description }}
+        </template>
+      </v-data-table>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

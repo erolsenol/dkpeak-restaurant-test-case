@@ -1,23 +1,21 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-data-table
-          :headers="headers"
-          :items="restaurants"
-          :items-per-page="5"
-          class="elevation-1"
-        >
-          <template v-slot:[`item.calories`]="{ item }">
-            {{ item.calories }}
-          </template>
-          <template v-slot:[`item.phone`]="{ item }">
-            {{ item.phone }}
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row class="pt-4">
+    <v-col cols="12">
+      <v-data-table
+        :headers="headers"
+        :items="restaurants"
+        :items-per-page="5"
+        class="elevation-1"
+      >
+        <template v-slot:[`item.calories`]="{ item }">
+          {{ item.calories }}
+        </template>
+        <template v-slot:[`item.phone`]="{ item }">
+          {{ item.phone }}
+        </template>
+      </v-data-table>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
