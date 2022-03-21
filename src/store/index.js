@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
+import AuthService from "@/http/api/services/auth";
 
 Vue.use(Vuex);
 
@@ -21,6 +22,8 @@ export const store = new Vuex.Store({
   actions: {
     async Login({ commit }) {
       console.log("login request");
+      const response = AuthService.login({ email: "", password: "" });
+      console.log("response", response);
       commit("setToken", { access_token: true, refresh_token: true });
     },
     async RefreshToken({ commit }) {
