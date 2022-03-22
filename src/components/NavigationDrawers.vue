@@ -54,6 +54,13 @@ export default {
             ["Create", "mdi-plus-outline", "item_create"],
           ],
         },
+        {
+          name: "Order",
+          cruds: [
+            ["List", "mdi-view-list-outline", "order_list"],
+            ["Create", "mdi-plus-outline", "order_create"],
+          ],
+        },
       ],
     };
   },

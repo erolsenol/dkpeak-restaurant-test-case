@@ -24,7 +24,7 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Item",
+  name: "ItemList",
   data() {
     return {
       items: [],
@@ -53,7 +53,7 @@ export default {
       if (response && response.data) {
         this.items = response.data;
       } else {
-        console.log("restaurant fetch error");
+        console.log("Items fetch error");
       }
     },
   },

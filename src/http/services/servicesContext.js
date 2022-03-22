@@ -1,5 +1,6 @@
 import RestaurantService from "./restaurant";
 import ItemService from "./item";
+import UserService from "./user";
 
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
@@ -24,6 +25,9 @@ class ServiceContext {
 
   get itemService() {
     return ItemService.instance;
+  }
+  get userService() {
+    return UserService.instance;
   }
 }
 

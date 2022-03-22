@@ -26,7 +26,7 @@
       </v-row>
       <v-row align="center" justify="center">
         <v-col cols="4">
-          <v-btn outlined @click="saveRestaurant"> Save Item </v-btn>
+          <v-btn outlined @click="saveItem"> Save Item </v-btn>
         </v-col>
       </v-row>
       <SnackBar v-model="bar.value" :color="bar.color" :text="bar.text" />
@@ -54,14 +54,13 @@ export default {
     };
   },
   methods: {
-    async saveRestaurant() {
+    async saveItem() {
       if (this.name && this.price) {
         const response = await this.$serviceContext.itemService.saveItem({
           name: this.name,
           price: this.price,
           description: this.description,
         });
-        console.log("response", response);
         if (response.status === 201) {
           this.snackBarShow("success", `${response.data.name} created`);
         } else {

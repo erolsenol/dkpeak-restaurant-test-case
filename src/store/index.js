@@ -82,7 +82,11 @@ export const store = new Vuex.Store({
   },
   getters: {
     isLogin(state) {
-      return state.login;
+      return (
+        state.login &&
+        state.access_token !== null &&
+        state.refresh_token !== null
+      );
     },
     getAccessToken(state) {
       return state.access_token;

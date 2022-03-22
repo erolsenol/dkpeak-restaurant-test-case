@@ -1,17 +1,13 @@
 <template>
   <v-container>
-       <router-view />
-    </v-container>
+    <router-view />
+  </v-container>
 </template>
 
 <script>
-
 export default {
-   name:"SignIn",
- 
-}
+  name: "SignIn",
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
