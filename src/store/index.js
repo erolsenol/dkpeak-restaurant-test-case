@@ -4,8 +4,9 @@ import router from "@/router";
 // import AuthService from "@/http/api/services/auth";
 import { DkpeakConnector } from "@/http/clients";
 
-const TOKEN_KEY = process.env.VUE_APP_TOKEN_KEY;
-const REFRESH_TOKEN_KEY = process.env.VUE_APP_REFRESH_TOKEN_KEY;
+const TOKEN_KEY = process.env.VUE_APP_ACCESS_TOKEN_KEY || "access_token";
+const REFRESH_TOKEN_KEY =
+  process.env.VUE_APP_REFRESH_TOKEN_KEY || "refresh_token";
 
 Vue.use(Vuex);
 

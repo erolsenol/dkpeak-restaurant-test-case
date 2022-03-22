@@ -1,5 +1,7 @@
-const VUE_APP_TOKEN_KEY = process.env.VUE_APP_ACCESS_TOKEN_KEY;
-const VUE_APP_REFRESH_TOKEN_KEY = process.env.VUE_APP_REFRESH_TOKEN_KEY;
+const VUE_APP_TOKEN_KEY =
+  process.env.VUE_APP_ACCESS_TOKEN_KEY || "access_token";
+const REFRESH_TOKEN_KEY =
+  process.env.VUE_APP_REFRESH_TOKEN_KEY || "refresh_token";
 
 const TokenUtils = {
   getToken() {
@@ -13,7 +15,7 @@ const TokenUtils = {
     localStorage.removeItem(VUE_APP_TOKEN_KEY);
   },
   getRefreshToken() {
-    return localStorage.getItem(VUE_APP_REFRESH_TOKEN_KEY);
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
   },
   removeAllStorage() {
     localStorage.clear();
